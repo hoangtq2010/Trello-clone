@@ -12,6 +12,10 @@ body {
     display: grid;
     grid-template-rows: 40px 50px 1fr;
     background-color: $board-bg-color;
+    .icon {
+        font-size: 14px;
+        margin-right: 3px;
+    }
 }
 
 

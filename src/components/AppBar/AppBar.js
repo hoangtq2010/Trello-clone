@@ -3,7 +3,7 @@ import React from 'react'
 import './AppBar.scss'
 
 function AppBar() {
-    return(
+    return (
         <nav className="navbar-app">App Bar</nav>
     )
 }
