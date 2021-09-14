@@ -1,6 +1,6 @@
 @import '../../setting';
 
-$list-bg-color: #ebecf0;
+
 $column-header-height: 36px;
 $column-footer-height: 36px;
 $column-border-radius: 5px;
@@ -38,7 +38,7 @@ $column-border-radius: 5px;
         border-bottom-right-radius: $column-border-radius;
         color: #888;
         .footer-actions {
-            margin-left: $gap;
+            margin-left: 5px;
             cursor: pointer;
             &:hover {
                 color: #333;
