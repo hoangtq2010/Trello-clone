@@ -1,8 +1,8 @@
 @import '../../setting';
 
 .board-content {
+    height: $board-content-height;
     display: flex;
-    margin: 0 $gap $gap;
     overflow-x: auto;
     overflow-y: hidden;
     &::after {
@@ -36,7 +36,7 @@
         margin-left: $gap;
         font-size: 15px;
         background-color: hsla(0, 0%, 100%, .24);
-        border-radius: 4px;
+        border-radius: $column-border-radius;
         &:hover {
             background-color: hsla(0, 0%, 100%, .34);
         }
@@ -45,22 +45,25 @@
     .enter-new-column {
         width: 250px;
         max-width: 250px;
-        background-color: $list-bg-color;
+        background-color: $column-bg-color;
         line-height: 32px;
-        padding: 4px 0 4px 15px;
+        padding: 4px 10px;
         margin-left: $gap;
-        border-radius: 4px;
+        border-radius: $column-border-radius;
         input.input-enter-new-column {
             margin: 5px 0;
+            &:focus {
+                border-color: $input-border-color;
+            }
         }
         span.cancel-new-column {
             margin-left: $gap;
             cursor: pointer;
             i {
                 font-size: 18px;
-                color: $alert;
+                color: $alert-danger;
                 &:hover {
-                    color: darken($color: $alert, $amount: 10);
+                    color: darken($color: $alert-danger, $amount: 10);
                 }
             }
         }

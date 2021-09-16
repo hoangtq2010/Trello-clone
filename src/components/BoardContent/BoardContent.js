@@ -48,7 +48,7 @@ function BoardContent() {
         newColumns = applyDrag(newColumns, dropResult)
 
         let newBoard = { ...board }
-        newBoard.columnOder = newColumns.map(c => c.id)
+        newBoard.columnOrder = newColumns.map(c => c.id)
         newBoard.columns = newColumns
 
         setColumns(newColumns)
@@ -84,13 +84,35 @@ function BoardContent() {
         newColumns.push(newColumnToAdd)
 
         let newBoard = { ...board }
-        newBoard.columnOder = newColumns.map(c => c.id)
+        newBoard.columnOrder = newColumns.map(c => c.id)
         newBoard.columns = newColumns
 
         setColumns(newColumns)
         setBoard(newBoard)
         setnewColumnTitle('')
         toggleOpenNewColumnForm()
+    }
+
+    const onUpdateColumn = (newColumnToUpdate) => {
+        const columnIdToUpdate = newColumnToUpdate.id
+
+        let newColumns = [...columns]
+        const columnIndexToUpdate = newColumns.findIndex(i => i.id === columnIdToUpdate)
+
+        if (newColumnToUpdate._destroy) {
+            //remove column
+            newColumns.splice(columnIndexToUpdate, 1)
+        } else {
+            //update column info
+            newColumns.splice(columnIndexToUpdate, 1, newColumnToUpdate)
+        }
+
+        let newBoard = { ...board }
+        newBoard.columnOrder = newColumns.map(c => c.id)
+        newBoard.columns = newColumns
+
+        setColumns(newColumns)
+        setBoard(newBoard)
     }
 
     return (
@@ -108,7 +130,7 @@ function BoardContent() {
             >
                 {columns.map((column, index) => (
                     <Draggable key={index}>
-                        <Column column={column} onCardDrop={onCardDrop}/>
+                        <Column column={column} onCardDrop={onCardDrop} onUpdateColumn={onUpdateColumn}/>
                     </Draggable>
                 ))}
             </Container>
