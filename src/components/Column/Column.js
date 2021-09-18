@@ -1,15 +1,16 @@
 import Card from 'components/Card/Card'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Column.scss'
 
 import { mapOrder } from '../../utilities/sorts'
 
 import { Container, Draggable } from 'react-smooth-dnd'
 
-import { Dropdown, Form } from 'react-bootstrap'
+import { Dropdown, Form, Button } from 'react-bootstrap'
 import ConfirmModal from '../../components/Common/ConfirmModal'
 import { MODAL_ACTION_CONFIRM } from 'utilities/constants'
 import { saveContentAfterPressEnter, selectAllInLineText } from '../../utilities/contentEdittable'
+import { cloneDeep } from 'lodash'
 
 function Column(props) {
     const { column, onCardDrop, onUpdateColumn } = props //data tu cha->con
@@ -19,7 +20,7 @@ function Column(props) {
     const toggleShowConfirmModal = () => setShowConfirmModal(!showConfirmModal)
 
     const [columnTitle, setColumnTitle] = useState('')
-    const handleColumnTitleChange = useCallback((e) => setColumnTitle(e.target.value), [])
+    const handleColumnTitleChange = (e) => setColumnTitle(e.target.value)
 
     useEffect(() => {
         setColumnTitle(column.title)
@@ -42,6 +43,41 @@ function Column(props) {
             title: columnTitle
         }
         onUpdateColumn(newColumn)
+    }
+
+    const [openNewCardForm, setOpenNewCardForm] = useState(false)
+    const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
+
+    const newCardInputRef = useRef(null)
+    useEffect( () => {
+        if (newCardInputRef && newCardInputRef.current) {
+            newCardInputRef.current.focus()
+            newCardInputRef.current.select()
+        }
+    }, [openNewCardForm])
+
+    const [newCardTitle, setnewCardTitle] = useState('')
+    const onNewCardTitleChange = (e) => setnewCardTitle(e.target.value)
+
+    const addNewCard = () => {
+        if (!newCardTitle) {
+            newCardInputRef.current.focus()
+            return
+        }
+        const newCardToAdd = {
+            id: Math.random().toString(36).substr(2, 5),
+            boardId: column.boardId,
+            title: newCardTitle.trim(),
+            columnId: column.id,
+            cover: null
+        }
+        let newColumn = cloneDeep(column)
+        newColumn.cards.push(newCardToAdd)
+        newColumn.cardOrder.push(newCardToAdd.id)
+
+        onUpdateColumn(newColumn)
+        setnewCardTitle('')
+        toggleOpenNewCardForm()
     }
 
     return (
@@ -95,11 +131,35 @@ function Column(props) {
                         </Draggable>
                     ))}
                 </Container>
+                {openNewCardForm &&
+                    <div className="add-new-card-area">
+                    <Form.Control
+                        size="sm"
+                        as="textarea"
+                        placeholder="Enter a title for this card..."
+                        className="textarea-enter-new-column"
+                        ref={newCardInputRef} //mở ra tự động focus vào inpput
+                        value={newCardTitle}
+                        onChange={onNewCardTitleChange}
+                        onKeyDown={event => (event.key === 'Enter') && addNewCard()}
+                    />
+                    </div>
+                }
             </div>
             <footer>
-                <div className="footer-actions">
-                    <i className="fa fa-plus icon" />Add another card
-                </div>
+                {openNewCardForm &&
+                    <div className="add-new-card-actions">
+                        <Button variant="success" size="sm" onClick={addNewCard}>Add card</Button>
+                        <span className="cancel-icon" onClick={toggleOpenNewCardForm}>
+                            <i className="fa fa-trash icon"></i>
+                        </span>
+                    </div>
+                }
+                {!openNewCardForm &&
+                    <div className="footer-actions" onClick={toggleOpenNewCardForm}>
+                        <i className="fa fa-plus icon" />Add another card
+                    </div>
+                }
             </footer>
 
             <ConfirmModal
