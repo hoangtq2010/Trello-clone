@@ -14,7 +14,7 @@ import { cloneDeep } from 'lodash'
 
 function Column(props) {
     const { column, onCardDrop, onUpdateColumn } = props //data tu cha->con
-    const cards = mapOrder(column.cards, column.cardOrder, 'id')
+    const cards = mapOrder(column.cards, column.cardOrder, '_id')
 
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const toggleShowConfirmModal = () => setShowConfirmModal(!showConfirmModal)
@@ -68,12 +68,12 @@ function Column(props) {
             id: Math.random().toString(36).substr(2, 5),
             boardId: column.boardId,
             title: newCardTitle.trim(),
-            columnId: column.id,
+            columnId: column._id,
             cover: null
         }
         let newColumn = cloneDeep(column)
         newColumn.cards.push(newCardToAdd)
-        newColumn.cardOrder.push(newCardToAdd.id)
+        newColumn.cardOrder.push(newCardToAdd._id)
 
         onUpdateColumn(newColumn)
         setnewCardTitle('')
@@ -114,7 +114,7 @@ function Column(props) {
                 <Container
                     orientation="vertical" //default
                     groupName="hoangkissdev-columns"
-                    onDrop={dropResult => onCardDrop(column.id, dropResult)}
+                    onDrop={dropResult => onCardDrop(column._id, dropResult)}
                     getChildPayload={index => cards[index]}
                     dragClass="card-ghost"
                     dropClass="card-ghost-drop"
