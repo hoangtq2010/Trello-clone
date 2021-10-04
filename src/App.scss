@@ -9,7 +9,9 @@ body {
 }
 
 .trello-master {
-    height: 100vh;
+    align-items: center;
+    margin: 2% 25% 0% 25%;
+    height: 85vh;
     display: grid;
     grid-template-rows: 40px 50px 1fr;
     background-color: $board-bg-color;

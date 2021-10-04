@@ -3,7 +3,7 @@ import './BoardBar.scss'
 
 function BoardBar () {
     return (
-        <nav className="navbar-board">Board Bar</nav>
+        <nav className="navbar-board">Hours works</nav>
     )
 }
 
