@@ -3,6 +3,7 @@ import { API_ROOT } from '../../utilities/constants'
 
 export const updateBoard = async (id, data) => {
   const request = await axios.put(`${API_ROOT}/v1/boards/${id}`, data) //đẩy lên request body
+  console.log(request)
   return request.data
 }
 
